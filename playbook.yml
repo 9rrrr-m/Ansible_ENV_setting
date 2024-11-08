@@ -1,0 +1,23 @@
+---
+- name: ansible-navigator env setting
+  hosts: all
+  vars_files:
+    - vars/secret.yml
+  tasks:
+    - name: useradd {{ user }}
+      ansible.builtin.user:
+        name: "{{ user }}"
+        password: "{{ passwd | password_hash('sha512') }}"
+        groups: wheel
+
+    - name: /etc/sudoers.d/{{ user }} has been deployed
+      ansible.builtin.copy:
+        content: "{{ user }}  ALL=(ALL)  NOPASSWD: ALL\n"
+        dest: /etc/sudoers.d/{{ user }}
+        mode: '0644'
+
+    - name: ssh public key has been deployed
+      ansible.posix.authorized_key:
+        user: "{{ user }}"
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
