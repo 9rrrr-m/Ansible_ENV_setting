@@ -1,21 +1,26 @@
 ---
 - name: ansible-navigator env setting
   hosts: all
+  # vars/secret.yml 파일에서 생성하고자 하는 user와 password 변수 설정이 가능합니다.
+  # 편리한 설정을 위해 vault-pass 설정을 하지 않았습니다.
   vars_files:
     - vars/secret.yml
   tasks:
+    # ansible 제어에 필요한 student 계정을 각 제어 노드에 생성합니다.
     - name: useradd {{ user }}
       ansible.builtin.user:
         name: "{{ user }}"
         password: "{{ passwd | password_hash('sha512') }}"
         groups: wheel
 
+    # 새로 생성한 사용자가 sudo 권한 상승시 password를 입력하지 않도록 설정합니다.
     - name: /etc/sudoers.d/{{ user }} has been deployed
       ansible.builtin.copy:
         content: "{{ user }}  ALL=(ALL)  NOPASSWD: ALL\n"
         dest: /etc/sudoers.d/{{ user }}
         mode: '0644'
 
+    # 생성한 사용자에게 제어노드 student 계정의 ssh public key를 배포합니다.
     - name: ssh public key has been deployed
       ansible.posix.authorized_key:
         user: "{{ user }}"
