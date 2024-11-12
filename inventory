@@ -1,4 +1,3 @@
-workstation ansible_connection=local
 servera
 serverb
 serverc

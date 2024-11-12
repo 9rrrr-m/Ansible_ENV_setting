@@ -37,6 +37,7 @@
     chmod +x before_playbook.sh
     ./before_playbook.sh
   
+  - student 사용자의 sudo 권한을 설정합니다.
   - ansible-navigator 프로그램을 설치합니다.
   - ~/.vimrc 설정 파일의 내용을 yaml 형식에 최적화 합니다.
   - ~/bin/ande 쉘 스크립트로 ansible-doc에서 모듈의 예제만 확인 가능합니다.

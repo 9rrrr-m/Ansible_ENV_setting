@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# student 사용자의 sudo 권한을 설정합니다.
+echo 'student  ALL=(ALL)  NOPASSWD: ALL' | sudo tee /etc/sudoers.d/student
+
 # ansible-navigator 프로그램을 설치합니다.
 sudo dnf install python3-pip
 python3 -m pip install ansible-navigator --user
